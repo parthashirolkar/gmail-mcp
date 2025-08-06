@@ -8,7 +8,7 @@ from .models import EmailRequest, DraftRequest, EmailResponse, DraftInfo, UserIn
 
 __all__ = [
     "AuthManager",
-    "GmailClient", 
+    "GmailClient",
     "EmailRequest",
     "DraftRequest",
     "EmailResponse",
