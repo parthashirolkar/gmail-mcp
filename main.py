@@ -97,7 +97,7 @@ def cli(login, logout, switch_user, list_users, remove_user, credentials, curren
         click.echo("Please authenticate first with: gmail-mcp --login")
         sys.exit(1)
 
-    click.echo(f"Starting Gmail MCP server for user: {current}")
+    # Don't print startup message when running as MCP server (stdout is used for MCP protocol)
     asyncio.run(mcp.run())
 
 
