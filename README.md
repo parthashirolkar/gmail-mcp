@@ -136,7 +136,9 @@ Add to your `claude_desktop_config.json`:
 
 Once connected, your MCP client will have access to these tools:
 
-#### `send_email`
+#### Core Email Tools
+
+##### `send_email`
 Send an email immediately.
 
 **Parameters:**
@@ -152,27 +154,121 @@ Send an email immediately.
 Send an email to john@example.com with subject "Hello" and body "This is a test email"
 ```
 
-#### `create_draft`
+##### `create_draft`
 Create an email draft without sending.
 
 **Parameters:** Same as `send_email`
 
-#### `send_draft`
+##### `send_draft`
 Send an existing email draft.
 
 **Parameters:**
 - `draft_id` (string): ID of the draft to send
 
-#### `list_drafts`
+##### `list_drafts`
 List your email drafts.
 
 **Parameters:**
 - `max_results` (int, optional): Maximum drafts to return (default: 10)
 
-#### `get_user_info`
+##### `get_user_info`
 Get current authenticated user information.
 
 **Parameters:** None
+
+#### Enhanced Email Assistance Tools
+
+##### `get_subject_line_help`
+Get subject line suggestions and best practices based on email type and industry.
+
+**Parameters:**
+- `email_type` (string): Type of email (action_required, meeting_requests, status_updates, follow_ups, announcements, urgent, etc.)
+- `industry` (string, optional): Industry for specialized templates (sales, marketing, hr, finance, it, project_management)
+
+##### `validate_subject_line_tool`
+Validate a subject line against professional best practices.
+
+**Parameters:**
+- `subject` (string): Subject line to validate
+
+##### `get_email_templates`
+Get available email templates and signatures.
+
+**Parameters:**
+- `template_type` (string): Type of templates to retrieve ("html" or "signature")
+
+### MCP Prompts for Email Composition
+
+The server provides intelligent prompts to guide email composition:
+
+#### `professional_email_composer`
+Interactive guide for structured professional email creation.
+
+**Parameters:**
+- `email_type`: Type of email (general, request, announcement, follow_up, meeting, introduction)
+- `recipient_relationship`: Relationship level (professional, personal, unknown, executive) 
+- `urgency`: Urgency level (low, normal, high, urgent)
+
+#### `follow_up_email_generator`
+Generate contextually appropriate follow-up emails.
+
+**Parameters:**
+- `original_context`: Brief description of original email/request
+- `time_since_last`: Time elapsed since last communication
+- `follow_up_type`: Type of follow-up (polite_reminder, status_check, escalation, thank_you)
+
+#### `meeting_request_composer`
+Compose comprehensive meeting requests with all necessary details.
+
+**Parameters:**
+- `meeting_purpose`: Main reason for the meeting
+- `duration_minutes`: Expected duration in minutes
+- `attendee_count`: Number of expected attendees
+- `meeting_type`: Type of meeting (discussion, presentation, decision, brainstorm, check_in)
+
+#### `draft_strategy_advisor`
+Intelligent advice on whether to save as draft or send immediately.
+
+**Parameters:**
+- `email_purpose`: Main purpose of the email
+- `urgency`: How urgent the email is
+- `stakeholder_count`: Number of people affected
+- `complexity`: Complexity of the topic
+
+#### `email_review_checklist`
+Comprehensive checklist for reviewing emails before sending.
+
+**Parameters:**
+- `email_type`: Type of email (general, meeting_request, urgent, announcement, sensitive)
+- `recipient_type`: Type of recipients (internal, external, mixed, executive)
+- `has_attachments`: Whether email includes attachments
+
+### MCP Resources
+
+Access professional email templates and guidelines:
+
+#### HTML Email Templates
+- `template://html_email/professional_announcement`
+- `template://html_email/meeting_invitation`
+- `template://html_email/project_update`
+- `template://html_email/newsletter`
+
+#### Email Signature Templates
+- `template://signature/standard_professional`
+- `template://signature/detailed_professional`
+- `template://signature/consultant_freelancer`
+- `template://signature/sales_business_development`
+- `template://signature/executive_minimal`
+- And 8 more specialized templates
+
+#### Professional Guidelines
+- `guidelines://security/recipient_management`
+- `guidelines://security/sensitive_information`
+- `guidelines://security/phishing_prevention`
+- `guidelines://etiquette/tone_and_language`
+- `guidelines://etiquette/timing_and_response`
+- `guidelines://etiquette/cultural_considerations`
+- And more categories for comprehensive guidance
 
 ## Security
 
