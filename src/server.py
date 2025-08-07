@@ -15,8 +15,12 @@ from .resources.subject_line_guidelines import (
 from .resources.email_security_guidelines import get_security_guidelines_by_category
 from .resources.email_etiquette import EMAIL_ETIQUETTE_GUIDELINES
 
-# Initialize MCP server
-mcp = FastMCP("Gmail MCP Server")
+def create_mcp_server(host="127.0.0.1", port=8000):
+    """Create and configure the MCP server."""
+    return FastMCP("Gmail MCP Server", host=host, port=port)
+
+# Initialize MCP server with defaults
+mcp = create_mcp_server()
 
 # Global auth manager
 auth_manager = AuthManager()
@@ -639,8 +643,10 @@ async def send_email(
     """
     client = get_authenticated_client()
     if not client:
-        raise Exception(
-            "No authenticated user. Please login first with: gmail-mcp --login"
+        return EmailResponse(
+            success=False,
+            message="Gmail authentication required. Please authenticate using: gmail-mcp --login",
+            message_id=None,
         )
 
     if ctx:
@@ -694,8 +700,10 @@ async def create_draft(
     """
     client = get_authenticated_client()
     if not client:
-        raise Exception(
-            "No authenticated user. Please login first with: gmail-mcp --login"
+        return EmailResponse(
+            success=False,
+            message="Gmail authentication required. Please authenticate using: gmail-mcp --login",
+            message_id=None,
         )
 
     if ctx:
@@ -735,8 +743,10 @@ async def send_draft(draft_id: str, ctx=None) -> EmailResponse:
     """
     client = get_authenticated_client()
     if not client:
-        raise Exception(
-            "No authenticated user. Please login first with: gmail-mcp --login"
+        return EmailResponse(
+            success=False,
+            message="Gmail authentication required. Please authenticate using: gmail-mcp --login",
+            message_id=None,
         )
 
     if ctx:
@@ -765,9 +775,7 @@ async def list_drafts(max_results: int = 10, ctx=None) -> List[DraftInfo]:
     """
     client = get_authenticated_client()
     if not client:
-        raise Exception(
-            "No authenticated user. Please login first with: gmail-mcp --login"
-        )
+        return []  # Return empty list when not authenticated
 
     if ctx:
         await ctx.info(f"Listing up to {max_results} drafts")
@@ -792,8 +800,10 @@ async def get_user_info(ctx=None) -> UserInfo:
     """Get current authenticated user information."""
     client = get_authenticated_client()
     if not client:
-        raise Exception(
-            "No authenticated user. Please login first with: gmail-mcp --login"
+        return UserInfo(
+            email="Not authenticated",
+            name="Please authenticate first",
+            verified_email=False,
         )
 
     try:

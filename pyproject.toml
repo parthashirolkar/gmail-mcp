@@ -18,6 +18,9 @@ dependencies = [
 [project.scripts]
 gmail-mcp = "main:cli"
 
+[project.entry-points."mcp.server"]
+gmail = "src.server:mcp"
+
 [project.optional-dependencies]
 dev = [
     "pytest",

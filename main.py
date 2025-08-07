@@ -1,10 +1,11 @@
 """Gmail MCP Server - Entry point and CLI interface."""
 
-import asyncio
 import sys
+import os
 import click
 
-from src.server import mcp, auth_manager
+from src.server import auth_manager
+from src.server import create_mcp_server
 
 
 # CLI interface
@@ -18,7 +19,8 @@ from src.server import mcp, auth_manager
 @click.option("--remove-user", type=str, help="Remove a specific user")
 @click.option("--credentials", type=str, help="Path to OAuth2 credentials file")
 @click.option("--current-user", is_flag=True, help="Show current authenticated user")
-def cli(login, logout, switch_user, list_users, remove_user, credentials, current_user):
+@click.option("--http", is_flag=True, help="Start HTTP server for Smithery deployment")
+def cli(login, logout, switch_user, list_users, remove_user, credentials, current_user, http):
     """Gmail MCP Server CLI."""
 
     if credentials:
@@ -90,15 +92,21 @@ def cli(login, logout, switch_user, list_users, remove_user, credentials, curren
             click.echo("No user currently authenticated")
         return
 
-    # Default: Start MCP server
-    current = auth_manager.get_current_user()
-    if not current:
-        click.echo("Error: No authenticated user found.")
-        click.echo("Please authenticate first with: gmail-mcp --login")
-        sys.exit(1)
+    # HTTP server mode for Smithery deployment
+    if http:
+        port = int(os.getenv("PORT", 8000))
+        host = "0.0.0.0"
+        
+        click.echo(f"Starting SSE HTTP server on {host}:{port} for Smithery deployment")
+        mcp_server = create_mcp_server(host=host, port=port)
+        mcp_server.run(transport="sse")
+        return
 
-    # Don't print startup message when running as MCP server (stdout is used for MCP protocol)
-    asyncio.run(mcp.run())
+    # Default: Start MCP server
+    # Allow server startup without authentication for tool discovery (required for Smithery)
+    # Tools will handle authentication checks individually
+    mcp_server = create_mcp_server()
+    mcp_server.run()
 
 
 if __name__ == "__main__":

@@ -270,6 +270,69 @@ Access professional email templates and guidelines:
 - `guidelines://etiquette/cultural_considerations`
 - And more categories for comprehensive guidance
 
+## Deployment Options
+
+### Option 1: Local Installation (Recommended for Development)
+
+Follow the [Installation](#installation) section above for local development and testing.
+
+### Option 2: Smithery Deployment (Recommended for Production)
+
+Deploy the Gmail MCP Server to [Smithery](https://smithery.ai) for easy cloud-based MCP server hosting.
+
+#### Prerequisites for Smithery
+- Google Cloud Console project with Gmail API enabled
+- OAuth2 credentials JSON file
+- Smithery account
+
+#### Deployment Steps
+
+1. **Prepare your credentials**
+   - Follow the [Gmail API Setup](#gmail-api-setup) section to get your `credentials.json` file
+   - Keep this file secure - you'll upload it during Smithery configuration
+
+2. **Deploy to Smithery**
+   - Visit [Smithery](https://smithery.ai) and create an account
+   - Connect your GitHub repository containing this Gmail MCP Server
+   - Smithery will automatically detect the `smithery.yaml` configuration
+
+3. **Configure during deployment**
+   - Upload your OAuth2 `credentials.json` file
+   - Smithery will handle the rest automatically
+
+4. **Connect to your MCP client**
+   - Use the Smithery-provided connection details in your MCP client
+   - The server will start without authentication and allow tool discovery
+   - Individual tools will prompt for authentication when first used
+
+#### Smithery Benefits
+- **Automatic scaling** - Server scales with usage
+- **Zero maintenance** - Updates and security patches handled automatically  
+- **Secure credential storage** - OAuth2 tokens encrypted and managed securely
+- **Multi-user support** - Team members can authenticate their own Gmail accounts
+- **Always available** - 24/7 uptime without managing your own infrastructure
+
+### Option 3: Docker Deployment
+
+For custom Docker deployments:
+
+```bash
+# Build the Docker image
+docker build -t gmail-mcp .
+
+# Run with environment variables
+docker run -p 8000:8000 \
+  -e PORT=8000 \
+  -v /path/to/credentials.json:/app/credentials.json \
+  gmail-mcp
+```
+
+The Docker container:
+- Exposes port 8000 for HTTP access
+- Supports PORT environment variable
+- Includes health checks
+- Runs the server in HTTP mode for web-based MCP clients
+
 ## Security
 
 ### Authentication Security

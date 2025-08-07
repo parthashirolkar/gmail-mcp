@@ -1,0 +1,19 @@
+runtime: "container"
+build:
+  dockerfile: "Dockerfile"
+  dockerBuildPath: "."
+startCommand:
+  type: "http"
+  configSchema:
+    type: "object"
+    properties:
+      credentials_path:
+        type: "string"
+        description: "Path to OAuth2 credentials JSON file from Google Cloud Console"
+      gmail_user:
+        type: "string"
+        description: "Gmail address to authenticate (optional, can be set after deployment)"
+    required: ["credentials_path"]
+  exampleConfig:
+    credentials_path: "/app/credentials.json"
+    gmail_user: "user@gmail.com"
